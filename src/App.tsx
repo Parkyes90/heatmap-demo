@@ -15,13 +15,13 @@ function App() {
   useEffect(() => {
     const interval = setInterval(() => {
       setTime((prev) => prev + 1);
-    }, 2000);
+    }, 1000);
     return () => {
       clearInterval(interval);
     };
   }, [setTime]);
   namedSeongnam.features = namedSeongnam.features.map((f) => {
-    const parsed = f.properties.adm_nm.split(' ');
+    const parsed = f.properties.adm_nm.split('성남시');
     const name = parsed[parsed.length - 1];
     data.push({ name, value: getRandomInt(500000, 30000000) });
     return {
@@ -35,7 +35,7 @@ function App() {
   const ref = useRef<ReactEcharts>(null);
   useEffect(() => {
     if (ref) {
-      echarts.registerMap('seongnam', seongnam);
+      echarts.registerMap('성남', seongnam);
     }
   }, [ref]);
   return (
@@ -85,10 +85,10 @@ function App() {
           },
           series: [
             {
-              name: 'SeongNam',
+              name: '성남',
               type: 'map',
               roam: true,
-              map: 'seongnam',
+              map: '성남',
               emphasis: {
                 label: {
                   show: true,
