@@ -12,14 +12,14 @@ function App() {
   const namedSeongnam = seongnam;
   const [time, setTime] = useState(0);
   const data: any = [];
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTime((prev) => prev + 1);
-    }, 1000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, [setTime]);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setTime((prev) => prev + 1);
+  //   }, 1000);
+  //   return () => {
+  //     clearInterval(interval);
+  //   };
+  // }, [setTime]);
   namedSeongnam.features = namedSeongnam.features.map((f) => {
     const parsed = f.properties.adm_nm.split('성남시');
     const name = parsed[parsed.length - 1];
