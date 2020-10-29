@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import ReactEcharts from 'echarts-for-react';
 import echarts from 'echarts';
 import seongnam from 'assets/maps/seongnam.json';
+import seongnam2 from 'assets/maps/seongnam2.json';
 import { setInterval } from 'timers';
 function getRandomInt(min: number, max: number) {
   min = Math.ceil(min);
@@ -10,8 +11,10 @@ function getRandomInt(min: number, max: number) {
 }
 function App() {
   const namedSeongnam = seongnam;
+  const namedSeongnam2 = seongnam2;
   const [time, setTime] = useState(0);
   const data: any = [];
+  const data2: any = [];
   // useEffect(() => {
   //   const interval = setInterval(() => {
   //     setTime((prev) => prev + 1);
@@ -32,10 +35,23 @@ function App() {
       },
     };
   });
+  namedSeongnam2.features = namedSeongnam2.features.map((f) => {
+    const parsed = f.properties.adm_nm.split('성남시');
+    const name = parsed[parsed.length - 1];
+    data2.push({ name, value: getRandomInt(500000, 30000000) });
+    return {
+      ...f,
+      properties: {
+        ...f.properties,
+        name,
+      },
+    };
+  });
   const ref = useRef<ReactEcharts>(null);
   useEffect(() => {
     if (ref) {
       echarts.registerMap('성남', seongnam);
+      echarts.registerMap('성남2', seongnam2);
     }
   }, [ref]);
   return (
@@ -95,6 +111,18 @@ function App() {
                 },
               },
               data,
+            },
+            {
+              name: '성남2',
+              type: 'map',
+              roam: true,
+              map: '성남2',
+              emphasis: {
+                label: {
+                  show: true,
+                },
+              },
+              data: data2,
             },
           ],
         }}
