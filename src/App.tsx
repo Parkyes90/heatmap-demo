@@ -2,10 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import ReactEcharts from 'echarts-for-react';
 import echarts from 'echarts';
 import seongnam from 'assets/maps/seongnam.json';
-import seongnam2 from 'assets/maps/seongnam2.json';
 import geo from 'assets/maps/geo.json';
 import geoValues from 'assets/maps/geo-values.json';
-import { setInterval } from 'timers';
 function getRandomInt(min: number, max: number) {
   min = Math.ceil(min);
   max = Math.floor(max);
