@@ -3,6 +3,8 @@ import ReactEcharts from 'echarts-for-react';
 import echarts from 'echarts';
 import seongnam from 'assets/maps/seongnam.json';
 import seongnam2 from 'assets/maps/seongnam2.json';
+import geo from 'assets/maps/geo.json';
+import geoValues from 'assets/maps/geo-values.json';
 import { setInterval } from 'timers';
 function getRandomInt(min: number, max: number) {
   min = Math.ceil(min);
@@ -11,22 +13,12 @@ function getRandomInt(min: number, max: number) {
 }
 function App() {
   const namedSeongnam = seongnam;
-  const namedSeongnam2 = seongnam2;
-  const [time, setTime] = useState(0);
+  const [time] = useState(0);
   const data: any = [];
-  const data2: any = [];
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setTime((prev) => prev + 1);
-  //   }, 1000);
-  //   return () => {
-  //     clearInterval(interval);
-  //   };
-  // }, [setTime]);
   namedSeongnam.features = namedSeongnam.features.map((f) => {
     const parsed = f.properties.adm_nm.split('성남시');
     const name = parsed[parsed.length - 1];
-    data.push({ name, value: getRandomInt(500000, 30000000) });
+    data.push({ name, value: getRandomInt(0, 49539) });
     return {
       ...f,
       properties: {
@@ -35,23 +27,12 @@ function App() {
       },
     };
   });
-  namedSeongnam2.features = namedSeongnam2.features.map((f) => {
-    const parsed = f.properties.adm_nm.split('성남시');
-    const name = parsed[parsed.length - 1];
-    data2.push({ name, value: getRandomInt(500000, 30000000) });
-    return {
-      ...f,
-      properties: {
-        ...f.properties,
-        name,
-      },
-    };
-  });
+
   const ref = useRef<ReactEcharts>(null);
   useEffect(() => {
     if (ref) {
       echarts.registerMap('성남', seongnam);
-      echarts.registerMap('성남2', seongnam2);
+      echarts.registerMap('성남2', geo);
     }
   }, [ref]);
   return (
@@ -66,8 +47,8 @@ function App() {
           visualMap: [
             {
               left: 'right',
-              min: 500000,
-              max: 38000000,
+              min: 0,
+              max: 49539,
               inRange: {
                 color: [
                   '#313695',
@@ -122,7 +103,7 @@ function App() {
                   show: true,
                 },
               },
-              data: data2,
+              data: geoValues,
             },
           ],
         }}
