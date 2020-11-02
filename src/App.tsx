@@ -16,7 +16,7 @@ function App() {
   namedSeongnam.features = namedSeongnam.features.map((f) => {
     const parsed = f.properties.adm_nm.split('성남시');
     const name = parsed[parsed.length - 1];
-    data.push({ name, value: getRandomInt(0, 49539) });
+    data.push({ name, value: getRandomInt(0, 1) });
     return {
       ...f,
       properties: {
@@ -46,9 +46,10 @@ function App() {
             {
               left: 'right',
               min: 0,
-              max: 49539,
+              max: 1000,
               inRange: {
                 color: [
+                  '#fff',
                   '#313695',
                   '#4575b4',
                   '#74add1',
