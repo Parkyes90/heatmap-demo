@@ -44,13 +44,7 @@ if __name__ == "__main__":
         feature = {
             "type": "Feature",
             "properties": {
-                "OBJECTID": index,
-                "adm_nm": index,
-                "adm_cd": index,
-                "adm_cd2": index,
-                "sidonm": index,
                 "name": index,
-                "sggnm": index,
             },
             "geometry": {
                 "type": "Polygon",
