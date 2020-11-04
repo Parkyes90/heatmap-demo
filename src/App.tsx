@@ -48,20 +48,7 @@ function App() {
               min: 0,
               max: 1000,
               inRange: {
-                color: [
-                  '#fff',
-                  '#313695',
-                  '#4575b4',
-                  '#74add1',
-                  '#abd9e9',
-                  '#e0f3f8',
-                  '#ffffbf',
-                  '#fee090',
-                  '#fdae61',
-                  '#f46d43',
-                  '#d73027',
-                  '#a50026',
-                ],
+                color: ['#EDF6FD', '#8CD2FE', '#3D98EE', '#2F46B1', '#00004D'],
               },
               text: ['High', 'Low'], // 文本，默认为数值文本
               calculable: true,
@@ -79,6 +66,7 @@ function App() {
               return params.seriesName + '<br/>' + params.name + ': ' + value;
             },
           },
+
           series: [
             {
               name: '성남',
@@ -90,6 +78,7 @@ function App() {
                   show: true,
                 },
               },
+
               data,
             },
             {
@@ -102,7 +91,10 @@ function App() {
                   show: true,
                 },
               },
-              data: geoValues,
+              itemStyle: {
+                borderWidth: 0,
+              },
+              data: geoValues as any,
             },
           ],
         }}
