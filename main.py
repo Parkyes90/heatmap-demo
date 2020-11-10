@@ -14,18 +14,6 @@ def trans(long: float, lat: float):
     ]
 
 
-def get_geojson(features):
-    return {
-        "type": "FeatureCollection",
-        "name": "Seongnam",
-        "crs": {
-            "type": "name",
-            "properties": {"name": "urn:ogc:def:crs:OGC:1.3:CRS84"},
-        },
-        "features": features,
-    }
-
-
 if __name__ == "__main__":
     path = os.path.join("src", "assets", "data", "convert_data.csv")
     file = open(path, "r", encoding="utf-8")
@@ -33,28 +21,24 @@ if __name__ == "__main__":
     features = []
     values = []
     maximum = 0
+    count = 0
     for index, row in enumerate(data):
         if index == 0:
             continue
         long, lat, value = row
         value = float(value)
+        if value <= 400:
+            continue
         if value > maximum:
             maximum = value
-        values.append({"name": index, "value": value})
-        feature = {
-            "type": "Feature",
-            "properties": {
-                "name": index,
-            },
-            "geometry": {
-                "type": "Polygon",
-                "coordinates": [trans(float(long), float(lat))],
-            },
-        }
-        features.append(feature)
-    with open("geo.json", "w") as outfile:
-        json.dump(get_geojson(features), outfile, indent=2)
-    with open("geo-values.json", "w") as outfile:
+        values.append([count, value])
+        features.append([count, trans(float(long), float(lat))])
+        count += 1
+
+    with open("src/assets/maps/geo.json", "w") as outfile:
+        json.dump(features, outfile, indent=2)
+    with open("src/assets/maps/geo-values.json", "w") as outfile:
         json.dump(values, outfile, indent=2)
     print("Complete Write GeoJson")
     print(f"Maximum is {maximum}")
+    print(f"Count is {count}")

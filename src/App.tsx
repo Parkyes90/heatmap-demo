@@ -2,16 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import ReactEcharts from 'echarts-for-react';
 import echarts from 'echarts';
 import seongnam from 'assets/maps/seongnam.json';
-import geo from 'assets/maps/geo.json';
-import geoValues from 'assets/maps/geo-values.json';
-function getRandomInt(min: number, max: number) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min)) + min; //최댓값은 제외, 최솟값은 포함
-}
+import { getRandomInt, getSData, getValues } from './helpers';
+
 function App() {
   const namedSeongnam = seongnam;
   const [time] = useState(0);
+
+  const [values, setValues] = useState(getValues());
+  const featureCollection = getSData();
   const data: any = [];
   namedSeongnam.features = namedSeongnam.features.map((f) => {
     const parsed = f.properties.adm_nm.split('성남시');
@@ -28,11 +26,9 @@ function App() {
 
   const ref = useRef<ReactEcharts>(null);
   useEffect(() => {
-    if (ref) {
-      echarts.registerMap('성남', seongnam);
-      echarts.registerMap('성남2', geo);
-    }
-  }, [ref]);
+    echarts.registerMap('성남', seongnam);
+    echarts.registerMap('성남2', featureCollection);
+  }, [featureCollection]);
   return (
     <div className="App">
       <div>시간 {time}</div>
@@ -46,7 +42,7 @@ function App() {
             {
               left: 'right',
               min: 0,
-              max: 1000,
+              max: 2000,
               inRange: {
                 color: ['#EDF6FD', '#8CD2FE', '#3D98EE', '#2F46B1', '#00004D'],
               },
@@ -94,7 +90,7 @@ function App() {
               itemStyle: {
                 borderWidth: 0,
               },
-              data: geoValues as any,
+              data: values as any,
             },
           ],
         }}
