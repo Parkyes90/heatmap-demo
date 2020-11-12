@@ -1,11 +1,15 @@
-import geo from 'assets/maps/geo.json';
-import geoValues from 'assets/maps/geo-values.json';
+const COORD = [
+  [127.05726405974522, 37.39080929126367],
+  [127.05781961530079, 37.39080929126367],
+  [127.05781961530079, 37.39035474580913],
+  [127.05726405974522, 37.39035474580913],
+];
 
-type Coordinate = [number, number][][];
+const TYPE = [0, COORD];
 type Property = Record<string, string | number>;
 type Geometry = {
   type: string;
-  coordinates: Coordinate[];
+  coordinates: typeof COORD[];
 };
 type Feature = {
   type: string;
@@ -48,18 +52,18 @@ export function getFeatureCollection(
   };
 }
 
-export function getSData() {
+export function getSData(geo: typeof TYPE[]) {
   const features = geo.map((f) => ({
     type: 'Feature',
-    properties: { name: f[0] as number },
+    properties: { name: f[0] },
     geometry: {
       type: 'Polygon',
-      coordinates: [f[1]] as any,
+      coordinates: [f[1]],
     },
   }));
-  return getFeatureCollection(features, 'Seongnam');
+  return getFeatureCollection(features as any, 'Seongnam');
 }
 
-export function getValues() {
-  return geoValues.map((g) => ({ name: g[0], value: g[1] }));
+export function getValues(values: [number, number][]) {
+  return values.map((g) => ({ name: g[0], value: g[1] }));
 }
