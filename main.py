@@ -30,7 +30,7 @@ if __name__ == "__main__":
                     continue
                 long, lat, value = row
                 value = float(value)
-                if value <= 100:
+                if value <= 50:
                     continue
                 if value > maximum:
                     maximum = value

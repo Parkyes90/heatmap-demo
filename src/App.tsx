@@ -3,13 +3,14 @@ import ReactEcharts from 'echarts-for-react';
 import echarts from 'echarts';
 import seongnam from 'assets/maps/seongnam.json';
 import { getRandomInt, getSData, getValues } from './helpers';
+import geo_0 from 'assets/values/geo_0.json';
+import value_0 from 'assets/values/values_0.json';
 
 function App() {
   const namedSeongnam = seongnam;
-  const [time] = useState(0);
-
-  const [values, setValues] = useState(getValues());
-  const featureCollection = getSData();
+  const [time, setTime] = useState(0);
+  const [values, setValues] = useState(getValues(value_0));
+  const [featureCollection, setFeatureCollection] = useState(getSData(geo_0));
   const data: any = [];
   namedSeongnam.features = namedSeongnam.features.map((f) => {
     const parsed = f.properties.adm_nm.split('성남시');
@@ -24,6 +25,15 @@ function App() {
     };
   });
 
+  useEffect(() => {
+    if (time > 0 && time < 10) {
+      const jsonValues = require(`assets/values/values_${time}.json`);
+      const jsonGeo = require(`assets/values/geo_${time}.json`);
+      setValues(getValues(jsonValues));
+      setFeatureCollection(getSData(jsonGeo));
+    }
+  }, [time]);
+
   const ref = useRef<ReactEcharts>(null);
   useEffect(() => {
     echarts.registerMap('성남', seongnam);
@@ -32,6 +42,15 @@ function App() {
   return (
     <div className="App">
       <div>시간 {time}</div>
+      <button
+        onClick={() => {
+          setTime((prev) => {
+            return prev + 1;
+          });
+        }}
+      >
+        다음 시간
+      </button>
       <ReactEcharts
         opts={{
           width: 1000,
@@ -42,7 +61,7 @@ function App() {
             {
               left: 'right',
               min: 0,
-              max: 2000,
+              max: 500,
               inRange: {
                 color: ['#EDF6FD', '#8CD2FE', '#3D98EE', '#2F46B1', '#00004D'],
               },

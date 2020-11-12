@@ -5,6 +5,8 @@ const COORD = [
   [127.05726405974522, 37.39035474580913],
 ];
 
+const VALUE = [0, 274.18];
+
 const TYPE = [0, COORD];
 type Property = Record<string, string | number>;
 type Geometry = {
@@ -64,6 +66,6 @@ export function getSData(geo: typeof TYPE[]) {
   return getFeatureCollection(features as any, 'Seongnam');
 }
 
-export function getValues(values: [number, number][]) {
+export function getValues(values: typeof VALUE[]) {
   return values.map((g) => ({ name: g[0], value: g[1] }));
 }
