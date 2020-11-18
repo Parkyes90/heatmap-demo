@@ -124,7 +124,7 @@ function App() {
                   show: true,
                 },
               },
-              data: getValues(jsonValues) as any,
+              data: getValues(jsonValues),
             },
           ],
         }}
