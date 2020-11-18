@@ -1,17 +1,14 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import ReactEcharts from 'echarts-for-react';
 import echarts from 'echarts';
 import seongnam from 'assets/maps/seongnam.json';
 import { getRandomInt, getSData, getValues } from './helpers';
-import geo_0 from 'assets/values/geo_0.json';
-import value_0 from 'assets/values/values_0.json';
 
 function App() {
   const namedSeongnam = seongnam;
   const [time, setTime] = useState(0);
-  const [values, setValues] = useState(getValues(value_0));
-  const [featureCollection, setFeatureCollection] = useState(getSData(geo_0));
-  const data: any = [];
+  const ref = useRef<ReactEcharts>(null);
+  const data: any = useMemo(() => [], []);
   namedSeongnam.features = namedSeongnam.features.map((f) => {
     const parsed = f.properties.adm_nm.split('성남시');
     const name = parsed[parsed.length - 1];
@@ -24,27 +21,47 @@ function App() {
       },
     };
   });
-
+  const jsonValues = require(`assets/values/values_${time}.json`);
+  const jsonGeo = require(`assets/values/geo_${time}.json`);
   useEffect(() => {
-    if (time > 0 && time < 10) {
-      const jsonValues = require(`assets/values/values_${time}.json`);
-      const jsonGeo = require(`assets/values/geo_${time}.json`);
-      setValues(getValues(jsonValues));
-      setFeatureCollection(getSData(jsonGeo));
+    let isPaused = false;
+    const interval = setInterval(() => {
+      if (!isPaused) {
+        setTime((prev) => {
+          if (prev >= 23) {
+            return 0;
+          }
+          return prev + 1;
+        });
+      }
+    }, 500);
+    if (ref.current) {
+      const instance = ref.current.getEchartsInstance();
+      instance.on('mouseover', () => {
+        isPaused = true;
+      });
+      instance.on('mouseout', () => {
+        isPaused = false;
+      });
     }
-  }, [time]);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [ref]);
 
-  const ref = useRef<ReactEcharts>(null);
   useEffect(() => {
     echarts.registerMap('성남', seongnam);
-    echarts.registerMap('성남2', featureCollection);
-  }, [featureCollection]);
+    echarts.registerMap('성남2', getSData(jsonGeo));
+  }, [jsonGeo]);
   return (
     <div className="App">
       <div>시간 {time}</div>
       <button
         onClick={() => {
           setTime((prev) => {
+            if (prev >= 23) {
+              return 0;
+            }
             return prev + 1;
           });
         }}
@@ -56,12 +73,14 @@ function App() {
           width: 1000,
           height: 1000,
         }}
+        lazyUpdate
+        notMerge
         option={{
           visualMap: [
             {
               left: 'right',
               min: 0,
-              max: 500,
+              max: 100,
               inRange: {
                 color: ['#EDF6FD', '#8CD2FE', '#3D98EE', '#2F46B1', '#00004D'],
               },
@@ -81,7 +100,6 @@ function App() {
               return params.seriesName + '<br/>' + params.name + ': ' + value;
             },
           },
-
           series: [
             {
               name: '성남',
@@ -106,10 +124,7 @@ function App() {
                   show: true,
                 },
               },
-              itemStyle: {
-                borderWidth: 0,
-              },
-              data: values as any,
+              data: getValues(jsonValues) as any,
             },
           ],
         }}

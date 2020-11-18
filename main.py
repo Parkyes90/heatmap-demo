@@ -4,8 +4,8 @@ import os
 
 
 def trans(long: float, lat: float):
-    long_diff = 0.000277777777777
-    lat_diff = 0.000227272727272
+    long_diff = 0.000277777777777 * 5
+    lat_diff = 0.000227272727272 * 5
     return [
         [long - long_diff, lat + lat_diff],
         [long + long_diff, lat + lat_diff],
@@ -18,7 +18,7 @@ if __name__ == "__main__":
 
     for i in range(24):
         try:
-            path = os.path.join("src", "assets", "data", f"time_{i}.csv")
+            path = os.path.join("src", "assets", "data", f"time_{i}_250.csv")
             file = open(path, "r", encoding="utf-8")
             data = csv.reader(file)
             features = []
@@ -30,8 +30,6 @@ if __name__ == "__main__":
                     continue
                 long, lat, value = row
                 value = float(value)
-                if value <= 50:
-                    continue
                 if value > maximum:
                     maximum = value
                 values.append([count, value])
