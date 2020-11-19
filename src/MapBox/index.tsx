@@ -3,8 +3,9 @@ import { Component } from 'react';
 import MapGL, { Source, Layer } from 'react-map-gl';
 import ControlPanel from './control-panel';
 import { json as requestJson } from 'd3-request';
-import { heatmapLayer, countiesLayer, highlightLayer } from './map-style';
+import { heatmapLayer, countiesLayer } from './map-style';
 import seongnam2 from 'assets/maps/seongnam2.json';
+import geo from 'assets/values/geo_0.json';
 function filterFeaturesByDay(featureCollection: any, time: any) {
   const date = new Date(time);
   const year = date.getFullYear();
@@ -45,6 +46,7 @@ export default class MapBox extends Component<{}, State> {
     const current = new Date().getTime();
 
     this.state = {
+      data: geo,
       filter: ['in', 'COUNTY', ''],
       viewport: {
         latitude: 37.4,
@@ -57,34 +59,34 @@ export default class MapBox extends Component<{}, State> {
       startTime: current,
       endTime: current,
       selectedTime: current,
-      earthquakes: null,
+      earthquakes: geo,
     };
 
     this._handleChangeDay = this._handleChangeDay.bind(this);
     this._handleChangeAllDay = this._handleChangeAllDay.bind(this);
   }
-  componentDidMount() {
-    requestJson(
-      'https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson',
-      (error, response) => {
-        if (!error) {
-          // Note: In a real application you would do a validation of JSON data before doing anything with it,
-          // but for demonstration purposes we ingore this part here and just trying to select needed data...
-          const features = response.features;
-          const endTime = features[0].properties.time;
-          const startTime = features[features.length - 1].properties.time;
-          console.log(response);
-          this.setState({
-            data: response,
-            earthquakes: response,
-            endTime,
-            startTime,
-            selectedTime: endTime,
-          });
-        }
-      },
-    );
-  }
+  // componentDidMount() {
+  //   requestJson(
+  //     'https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson',
+  //     (error, response) => {
+  //       if (!error) {
+  //         // Note: In a real application you would do a validation of JSON data before doing anything with it,
+  //         // but for demonstration purposes we ingore this part here and just trying to select needed data...
+  //         const features = response.features;
+  //         const endTime = features[0].properties.time;
+  //         const startTime = features[features.length - 1].properties.time;
+  //         console.log(response);
+  //         this.setState({
+  //           data: response,
+  //           earthquakes: response,
+  //           endTime,
+  //           startTime,
+  //           selectedTime: endTime,
+  //         });
+  //       }
+  //     },
+  //   );
+  // }
   _onViewportChange = (viewport: ViewPort) => this.setState({ viewport });
 
   _handleChangeDay = (time: number) => {

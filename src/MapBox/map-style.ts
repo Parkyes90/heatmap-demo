@@ -1,11 +1,11 @@
-const MAX_ZOOM_LEVEL = 9;
+const MAX_ZOOM_LEVEL = 12;
 
 export const heatmapLayer = {
   maxzoom: MAX_ZOOM_LEVEL,
   type: 'heatmap',
   paint: {
     // Increase the heatmap weight based on frequency and property magnitude
-    'heatmap-weight': ['interpolate', ['linear'], ['get', 'mag'], 0, 0, 6, 1],
+    'heatmap-weight': ['interpolate', ['linear'], ['get', 'value'], 0, 0, 6, 1],
     // Increase the heatmap color weight weight by zoom level
     // heatmap-intensity is a multiplier on top of heatmap-weight
     'heatmap-intensity': [
@@ -15,7 +15,7 @@ export const heatmapLayer = {
       0,
       1,
       MAX_ZOOM_LEVEL,
-      3,
+      11,
     ],
     // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
     // Begin color ramp at 0-stop with a 0-transparancy color
