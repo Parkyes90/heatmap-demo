@@ -3,6 +3,7 @@ import React from 'react';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import EchartComponent from './EchartComponent';
 import MapBox from './MapBox';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 function App() {
   const history = useHistory();

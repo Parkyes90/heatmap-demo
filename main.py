@@ -15,7 +15,6 @@ def trans(long: float, lat: float):
 
 
 if __name__ == "__main__":
-
     for i in range(24):
         try:
             path = os.path.join("src", "assets", "data", f"time_{i}_250.csv")
@@ -42,5 +41,6 @@ if __name__ == "__main__":
             print("Complete Write GeoJson")
             print(f"Maximum is {maximum}")
             print(f"Count is {count}")
-        except FileNotFoundError:
+        except FileNotFoundError as e:
+            print(e)
             print(f"Not exists time_{i}.csv")

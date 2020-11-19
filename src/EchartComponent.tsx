@@ -53,8 +53,9 @@ const EchartComponent: React.FC = () => {
     echarts.registerMap('성남', seongnam);
     echarts.registerMap('성남2', getSData(jsonGeo));
   }, [jsonGeo]);
+
   return (
-    <div className="App">
+    <div className="App" style={{ height: '100%' }}>
       <div>시간 {time}</div>
       <button
         onClick={() => {
@@ -69,13 +70,14 @@ const EchartComponent: React.FC = () => {
         다음 시간
       </button>
       <ReactEcharts
-        opts={{
-          width: 1000,
-          height: 1000,
-        }}
         lazyUpdate
         notMerge
+        style={{ height: '80%', width: '80%' }}
         option={{
+          grid: {
+            width: '100%',
+            height: '100%',
+          },
           visualMap: [
             {
               left: 'right',
@@ -102,29 +104,47 @@ const EchartComponent: React.FC = () => {
           },
           series: [
             {
-              name: '성남',
-              type: 'map',
-              roam: true,
-              map: '성남',
-              emphasis: {
-                label: {
-                  show: true,
-                },
-              },
-
-              data,
-            },
-            {
               name: '성남2',
               type: 'map',
               roam: true,
               map: '성남2',
+              draggable: false,
               emphasis: {
                 label: {
                   show: true,
                 },
               },
-              data: getValues(jsonValues),
+              scaleLimit: {
+                max: 1,
+                min: 1,
+              },
+              itemStyle: {
+                opacity: 1,
+                borderWidth: 0,
+              },
+              data: getValues(jsonValues) as any,
+            },
+            {
+              name: '성남',
+              type: 'map',
+              roam: true,
+              zoom: 1,
+              draggable: false,
+              map: '성남',
+              scaleLimit: {
+                max: 1,
+                min: 1,
+              },
+              emphasis: {
+                label: {
+                  show: true,
+                },
+              },
+              itemStyle: {
+                opacity: 0.3,
+              },
+
+              data,
             },
           ],
         }}
